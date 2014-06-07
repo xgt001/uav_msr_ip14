@@ -121,7 +121,8 @@ class AutoProcessCore(QtGui.QMainWindow):
             # cv2.imshow("resize image",img)
             # cv2.waitKey(0)
 
-            img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+
+            img = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
 
             retval, threshold = cv2.threshold(img,170,200,cv2.THRESH_BINARY_INV)
             #
@@ -129,42 +130,55 @@ class AutoProcessCore(QtGui.QMainWindow):
             # cv2.waitKey(0)
 
             # contours,hierarchy = cv2.findContours(threshold,1,2)
+
             contours, hierarchy = cv2.findContours(threshold, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
             contours.sort(key=cv2.contourArea, reverse=True)
 
-
-
-
-
-
+            #DOCUMENTATION
             #
+
+
+            for i in range(0,100,1):
+
+                ret = cv2.matchShapes(contours[i],contours[i+1],1,0.0)
+                if cv2.contourArea(contours[i]) < 300 and cv2.contourArea(contours[i]) > 50 and ret < 5 and ret > 0 :
+
+                    print "match:"; print ret
+                    print "Area:"; print cv2.contourArea(contours[i])
+                    cv2.drawContours(img_sav,contours,i,(0,255,0),1)
+                    x,y,w,h = cv2.boundingRect(contours[i])
+                    cv2.rectangle(img_sav,(x,y),(x+w,y+h),(0,255,0),2)
+                    # cv2.imshow("test",img_sav) #disable showing the images while processing
+                    cv2.imwrite(str(self.blobLocation)+"blob"+str(i)+'.png', img_sav[y:y+h,x:x+w])
+                    # cv2.waitKey(0)
+
             # for cnt_detect in contours:
             #     area = cv2.contourArea(cnt_detect)
-            #     if area > 20:
+            #     if area > 2000:
             #         # (x,y),radius = cv2.minEnclosingCircle(cnt_detect)
             #         # center = (int(x),int(y))
             #         # radius = int(radius)
             #         # threshold = cv2.circle(threshold,center,radius,(0,255,0),2)
             #         # cv2.drawContours(threshold,cnt_detect,)
-            #
             #         print area
             #         cv2.drawContours(img_sav,cnt_detect, 0, (0,255,0), 7)
             #         cv2.imshow("test",img_sav)
             #         cv2.waitKey(0)
-            #         draw individual contours
-            # contour filtering
+            # # contour filtering
+
+
 
             #draw all contours
             # cv2.drawContours(img_sav, contours, -1, (0,255,0), 3)
 
-            cv2.drawContours(img_sav, contours, 0, (255, 0, 0), 2)
 
+            # cv2.drawContours(img_sav, contours, 7, (255, 0, 0), 2)
 
             # print contours
-            # printing contours is too much VERBOSE; try to avoid
 
             # print area
+
             #fair enough till here
             #
             # contours, hierarchy = cv2.findContours(threshold,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
@@ -172,18 +186,19 @@ class AutoProcessCore(QtGui.QMainWindow):
             #
             # print len(contours)
             #
-            # cnt = contours[0]
+            # cunt = contours[0]
             #
-            # print len(cnt)
+            # print len(cunt)
             #
-            # cv2.drawContours(img,cnt,-1,(0,255,0),-1)
+            # cv2.drawContours(img,cunt,-1,(0,255,0),-1)
             # #to keep the window afloat
             #
 
-            cv2.imshow("Contour Map",img_sav)
 
-            cv2.waitKey(0)
-            cv2.destroyAllWindows()
+            # cv2.imshow("contour extract",img_sav)
+            # cv2.waitKey(0)
+            # cv2.destroyAllWindows()
+
 
 def main():
 
