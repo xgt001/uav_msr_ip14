@@ -1,6 +1,7 @@
 import sys, os
 # from PyQt4.QtGui import pyqtSlot
 from PyQt4 import QtGui, QtCore
+import paramiko
 import subprocess
 import os
 
