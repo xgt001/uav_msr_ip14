@@ -121,7 +121,9 @@ class Gphoto(QtGui.QWidget):
         print ('checking parameters')
         I = self.imageTime.toPlainText()
         print "Image number:" + self.imageQuant.toPlainText()
-        command = "gphoto2 --capture-image-and-download -I="+self.imageTime.toPlainText()+" "+"-F="+self.imageQuant.toPlainText()+" "
+        time = str(self.imageTime.toPlainText()).strip()
+        quant = str(self.imageQuant.toPlainText()).strip()
+        command = "gphoto2 --capture-image-and-download -I="+time+" "+"-F="+quant+" "
         print command
         timedProc = subprocess.Popen(command,shell=True)
 

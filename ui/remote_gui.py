@@ -24,6 +24,7 @@ class Gphoto(QtGui.QWidget):
     def remote_executer(self,string):
         stdin, stdout, stderr = ssh.exec_command(string)
         print stdout.readlines()
+        print stderr.readlines()
 
 
     def initUI(self):
@@ -132,7 +133,9 @@ class Gphoto(QtGui.QWidget):
         print ('checking parameters')
         I = self.imageTime.toPlainText()
         print "Image number:" + self.imageQuant.toPlainText()
-        command = "gphoto2 --capture-image-and-download -I="+self.imageTime.toPlainText()+" "+"-F="+self.imageQuant.toPlainText()+" "
+        time = str(self.imageTime.toPlainText()).strip()
+        quant = str(self.imageQuant.toPlainText()).strip()
+        command = "gphoto2 --capture-image-and-download -I="+time+" "+"-F="+quant+" "
         print command
         self.remote_executer(command)
 

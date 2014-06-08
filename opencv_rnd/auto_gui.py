@@ -112,9 +112,9 @@ class AutoProcessCore(QtGui.QMainWindow):
 
             # QtCore.
             print filename
-            img = cv2.imread(str(filename))
-            # newx,newy = image.shape[1]/6,image.shape[0]/6 #new size (w,h)
-            # img = cv2.resize(image,(newx,newy))
+            image = cv2.imread(str(filename))
+            newx,newy = image.shape[1]/6,image.shape[0]/6 #new size (w,h)
+            img = cv2.resize(image,(newx,newy))
 
             img_sav = img
             # CODE: Resize Image Toggle
@@ -142,7 +142,7 @@ class AutoProcessCore(QtGui.QMainWindow):
             for i in range(0,100,1):
 
                 ret = cv2.matchShapes(contours[i],contours[i+1],1,0.0)
-                if cv2.contourArea(contours[i]) < 12000 and cv2.contourArea(contours[i]) > 4000 and ret < 5 and ret > 0 :
+                if cv2.contourArea(contours[i]) < 300 and cv2.contourArea(contours[i]) > 40 and ret < 5 and ret > 0 :
 
                     print "match:"; print ret
                     print "Area:"; print cv2.contourArea(contours[i])
