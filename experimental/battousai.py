@@ -74,6 +74,7 @@ class ImageDrawPanel(QGraphicsPixmapItem):
         self.x, self.y = -1, -1        
 
         self.pen = self.createPen(Qt.blue)
+        start()
         
     def createPen(self, color = Qt.black):
         pen = QPen(Qt.SolidLine)
@@ -195,7 +196,7 @@ class ImageDrawPanel(QGraphicsPixmapItem):
         self.update()
 
 class MainWindow(QMainWindow):
-    _FILE_EXTENSIONS = ("bmp", "jpg", "png", "xpm")
+    _FILE_EXTENSIONS = ("bmp", "jpg", "png", "xpm","JPG")
     actualImagePos = 0
     index = datetime.now()
     outputFolder = None
@@ -364,3 +365,6 @@ def start():
 
 '''END OF PROGRAM
 '''
+
+def __init__(self):
+    start()
