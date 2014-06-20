@@ -1,0 +1,6 @@
+import xlwt
+file = xlwt.Workbook()
+sheet = file.add_sheet("characteristics")
+
+
+

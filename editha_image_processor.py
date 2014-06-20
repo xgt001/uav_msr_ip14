@@ -16,12 +16,13 @@ class ImageViewer(QtGui.QMainWindow):
         self.imageLabel.setBackgroundRole(QtGui.QPalette.Base)
         self.imageLabel.setSizePolicy(QtGui.QSizePolicy.Ignored,QtGui.QSizePolicy.Ignored)
         self.imageLabel.setScaledContents(True)
+        self.imageLabel.resize(400,300)
 
         self.scrollArea = QtGui.QScrollArea()
         self.scrollArea.setBackgroundRole(QtGui.QPalette.Dark)
         self.scrollArea.setWidget(self.imageLabel)
         self.setCentralWidget(self.scrollArea)
-        self.setCursor(Qt.CrossCursor)
+        # self.setCursor(Qt.CrossCursor)
         self.createActions()
         self.createMenus()
         self.setWindowTitle("Edhitha Image Processor (Dev)")
@@ -117,6 +118,9 @@ class ImageViewer(QtGui.QMainWindow):
             self.updateActions()
             if not self.fitToWindowAct.isChecked():
                 self.imageLabel.adjustSize()
+        if e.key() == QtCore.Qt.Key_F:
+            self.paintEvent(e)
+
 
     def print_(self):
         dialog = QtGui.QPrintDialog(self.printer, self)
@@ -165,19 +169,35 @@ class ImageViewer(QtGui.QMainWindow):
         self.update()
         print self.x
 
+    def paintEvent(self, e):
+
+        qp = QtGui.QPainter()
+        qp.begin(self)
+        self.drawBrushes(qp)
+        qp.end()
+
+    def drawRect (self,qp,event):
+        brush = QtGui.QBrush(QtCore.Qt.SolidPattern)
+        qp.setBrush(brush)
+        qp.drawRect(event.pos().x(),event.pos().y(),)
+
+
+
+
+
   
     #change
     def about(self):
         QtGui.QMessageBox.about(self, "Editha 2014","Pre Alpha")
 
     def createActions(self):
-        self.openAct = QtGui.QAction("&Open...", self, shortcut="Ctrl+O",triggered=self.open)
+        # self.openAct = QtGui.QAction("&Open...", self, shortcut="Ctrl+O",triggered=self.open)
 
         self.printAct = QtGui.QAction("&Print...", self, shortcut="Ctrl+P",enabled=False, triggered=self.print_)
 
         self.exitAct = QtGui.QAction("E&xit", self, shortcut="Ctrl+Q",triggered=self.close)
 
-        self.openDirectoryAct =  QtGui.QAction("&OpenFolder...", self, shortcut="Ctrl+F",triggered=self.openDirectory)
+        self.openDirectoryAct =  QtGui.QAction("Open &Folder...", self, shortcut="Ctrl+F",triggered=self.openDirectory)
 
         self.zoomInAct = QtGui.QAction("Zoom &In (25%)", self,shortcut="Ctrl++", enabled=False, triggered=self.zoomIn)
 
@@ -193,8 +213,8 @@ class ImageViewer(QtGui.QMainWindow):
 
     def createMenus(self):
         self.fileMenu = QtGui.QMenu("&File", self)
-        self.fileMenu.addAction(self.openAct)
-        self.fileMenu.addAction(self.printAct)
+        # self.fileMenu.addAction(self.openAct)
+        # self.fileMenu.addAction(self.printAct)
         self.fileMenu.addAction(self.openDirectoryAct)
         self.fileMenu.addSeparator()
         self.fileMenu.addAction(self.exitAct)

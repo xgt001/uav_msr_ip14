@@ -4,6 +4,7 @@ from PyQt4 import QtGui, QtCore
 import paramiko
 import subprocess
 import os
+from threading import Thread
 
 
 class Gphoto(QtGui.QWidget):
@@ -19,17 +20,15 @@ class Gphoto(QtGui.QWidget):
         global ssh
         ssh= paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect('odroid', username='odroid',password='odroid')
+        ssh.connect('10.42.0.1', username='odroid',password='odroid') #have a watch on this, can replace IP with hostname
 
     def remote_executer(self,string):
         stdin, stdout, stderr = ssh.exec_command(string)
-        print stdout.readlines()
-        print stderr.readlines()
+        print stdout.readlines() #print output
+        print stderr.readlines() #print errors
 
 
     def initUI(self):
-
-
         # gphoto capture button
         capBtn = QtGui.QPushButton('Capture Image..',self)
         capBtn.clicked.connect(self.captureSimple)
@@ -40,7 +39,7 @@ class Gphoto(QtGui.QWidget):
 
         timedCapture = QtGui.QPushButton('Timed Capture..',self)
         timedCapture.setGeometry(QtCore.QRect(100, 110, 121, 41))
-        timedCapture.clicked.connect(self.captureTimed)
+        timedCapture.clicked.connect(self.thread_launcher)
         timedCapture.resize(capBtn.sizeHint())
 
 
@@ -125,6 +124,10 @@ class Gphoto(QtGui.QWidget):
         #self.setWindowIcon(QtGui.QIcon('web.png'))
         self.show()
 
+    def thread_launcher(self):
+        print "Launching timed capture thread"
+        Thread(target=self.captureTimed).start()
+
     def captureSimple(self):
         print ('launching process')
         self.remote_executer("gphoto2 --capture-image-and-download")
@@ -135,7 +138,8 @@ class Gphoto(QtGui.QWidget):
         print "Image number:" + self.imageQuant.toPlainText()
         time = str(self.imageTime.toPlainText()).strip()
         quant = str(self.imageQuant.toPlainText()).strip()
-        command = "gphoto2 --capture-image-and-download -I="+time+" "+"-F="+quant+" "
+        # command = "gphoto2 --capture-image-and-download -I="+time+" "+"-F="+quant+" "
+        command = "gphoto2 --capture-image -I="+time+" "+"-F="+quant+" "
         print command
         self.remote_executer(command)
 
@@ -190,12 +194,16 @@ class Gphoto(QtGui.QWidget):
         else:
             # shutterProc = subprocess.Popen("gphoto2 --set-config shutterspeed=5",shell=True)
             self.remote_executer("gphoto2 --set-config shutterspeed=5")
+# gphoto2 --download-images
+
+
 
 def main():
 
     app = QtGui.QApplication(sys.argv)
     ex = Gphoto()
     sys.exit(app.exec_())
+
 
 
 if __name__ == '__main__':

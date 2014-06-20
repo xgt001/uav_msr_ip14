@@ -74,12 +74,11 @@ class ImageDrawPanel(QGraphicsPixmapItem):
         self.x, self.y = -1, -1        
 
         self.pen = self.createPen(Qt.blue)
-        start()
-        
+
     def createPen(self, color = Qt.black):
         pen = QPen(Qt.SolidLine)
         pen.setColor(color)
-        pen.setWidth(1)
+        pen.setWidth(4)
         return pen
     '''
     def togleFieldMarkMode(self):
@@ -196,7 +195,7 @@ class ImageDrawPanel(QGraphicsPixmapItem):
         self.update()
 
 class MainWindow(QMainWindow):
-    _FILE_EXTENSIONS = ("bmp", "jpg", "png", "xpm","JPG")
+    _FILE_EXTENSIONS = ("bmp", "jpg", "png", "xpm","JPG","PNG")
     actualImagePos = 0
     index = datetime.now()
     outputFolder = None
@@ -207,7 +206,7 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
 
         self.scene = QGraphicsScene()
-        self.scene.setSceneRect(0, 0, 800, 600)
+        self.scene.setSceneRect(0, 0, 1024, 768)
 
         self.pixmaps = self.getImages()
         
@@ -222,7 +221,7 @@ class MainWindow(QMainWindow):
         self.widget.setLayout(layout)
         self.setCursor(Qt.CrossCursor)
         self.setCentralWidget(self.widget)
-        self.setWindowTitle("Battousai")
+        self.setWindowTitle("Edhitha Manual")
         
         self.actualImagePos = 0
         self.setUpActualImage()
@@ -233,6 +232,10 @@ class MainWindow(QMainWindow):
         self.imagePanel.cleanAll()
         if (self.pixmaps != None):
             print "set-up img ... ", self.actualImagePos, " of ", len(self.pixmaps)
+            # myScaledPixmap = self.pixmaps[self.actualImagePos].
+            #     scaled(self.label.size(), Qt.KeepAspectRatio)
+            # self.imagePanel.panel().setScale(self,)
+            self.imagePanel.setScale(0.23)
             self.imagePanel.setPixmap(self.pixmaps[self.actualImagePos])
             self.imagePanel.update()
         else:
@@ -323,12 +326,12 @@ class MainWindow(QMainWindow):
 #not of concern at the moment
     def getImages(self):
         
-        folder_name = self.chooseDirectory(u"Selecione o diretório de entrada das imagens...")
+        folder_name = self.chooseDirectory(u"Select Image Folder..")
         
         files = self.filterFiles(util.listFiles(folder_name), self._FILE_EXTENSIONS)
         
         if len(files) == 0:
-            print u"A pasta selecionada não possui arquivos dos tipos: ", self._FILE_EXTENSIONS
+            print u"No Images found ", self._FILE_EXTENSIONS
             return None
         else:
             qtdImages = len(files)
@@ -336,7 +339,7 @@ class MainWindow(QMainWindow):
             QProgressDialog(QWidget parent=None, Qt.WindowFlags flags=0)
             QProgressDialog(QString, QString, int, int, QWidget parent=None, Qt.WindowFlags flags=0)
             '''
-            progressDialog =  QProgressDialog("Carregando imagens", "Cancelar", 0, qtdImages)
+            progressDialog =  QProgressDialog("Loading Images..", "Cancel", 0, qtdImages)
             progressDialog.setWindowModality(Qt.WindowModal)
             progressDialog.setCancelButton(None)
             progressDialog.setGeometry(100, 100, 400, 80)

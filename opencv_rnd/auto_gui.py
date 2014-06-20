@@ -1,11 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
 """
 author: Ganesh Hegde
 last edited: June 2014
 """
-
 import sys
 import os
 import cv2
@@ -113,10 +111,11 @@ class AutoProcessCore(QtGui.QMainWindow):
             # QtCore.
             print filename
             image = cv2.imread(str(filename))
-            newx,newy = image.shape[1]/6,image.shape[0]/6 #new size (w,h)
-            img = cv2.resize(image,(newx,newy))
+            # newx,newy = image.shape[1]/6,image.shape[0]/6 #new size (w,h)
+            # img = cv2.resize(image,(newx,newy))
 
-            img_sav = img
+            img = image
+            img_sav = image
             # CODE: Resize Image Toggle
             # cv2.imshow("resize image",img)
             # cv2.waitKey(0)
@@ -141,8 +140,11 @@ class AutoProcessCore(QtGui.QMainWindow):
 
             for i in range(0,100,1):
 
+                if i == 100:
+                    exit()
+
                 ret = cv2.matchShapes(contours[i],contours[i+1],1,0.0)
-                if cv2.contourArea(contours[i]) < 300 and cv2.contourArea(contours[i]) > 40 and ret < 5 and ret > 0 :
+                if cv2.contourArea(contours[i]) < 14000 and cv2.contourArea(contours[i]) > 3000 and ret < 5 and ret > 0 :
 
                     print "match:"; print ret
                     print "Area:"; print cv2.contourArea(contours[i])
@@ -150,7 +152,7 @@ class AutoProcessCore(QtGui.QMainWindow):
                     x,y,w,h = cv2.boundingRect(contours[i])
                     cv2.rectangle(img_sav,(x,y),(x+w,y+h),(0,255,0),2)
                     # cv2.imshow("test",img_sav) #disable showing the images while processing
-                    cv2.imwrite(str(self.blobLocation)+"blob"+str(i)+'.png', img_sav[y:y+h,x:x+w])
+                    cv2.imwrite(str(self.blobLocation)+"/"+"blob"+str(i)+'.png', img_sav[y:y+h,x:x+w])
                     # cv2.waitKey(0)
 
             # for cnt_detect in contours:

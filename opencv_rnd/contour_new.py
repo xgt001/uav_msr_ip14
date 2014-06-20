@@ -31,6 +31,9 @@ contours, hierarchy = cv2.findContours(threshold, cv2.RETR_TREE, cv2.CHAIN_APPRO
 
 contours.sort(key=cv2.contourArea, reverse=True)
 
+
+
+
 #DOCUMENTATION
 #
 

@@ -303,6 +303,8 @@ class ImageViewer(QtGui.QMainWindow):
             self.updateActions()
             if not self.fitToWindowAct.isChecked():
                 self.imageLabel.adjustSize()
+        # if e.key() ==QtCore.Qt.Key_C:
+
 
     def print_(self):
         dialog = QtGui.QPrintDialog(self.printer, self)

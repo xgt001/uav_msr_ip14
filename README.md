@@ -27,6 +27,6 @@ Based On
 Dependencies
 ---------------------
 
-Python OpenCV, PyQT4, Paramiko
+Python OpenCV, PyQT4, Paramiko, VNC Viewer
 
 

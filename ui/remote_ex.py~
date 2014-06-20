@@ -1,0 +1,15 @@
+import paramiko
+
+ssh = paramiko.SSHClient()
+
+ssh.set_missing_host_key_policy(
+    paramiko.AutoAddPolicy())
+
+ssh.connect(hostname='10.42.0.1',port=22, username='odroid',password='odroid')
+
+ssh.exec_command=("ls -a")
+
+test = "uname -r"
+stdout,stdin,stderr=ssh.exec_command(str(test))
+
+print stdout.readlines()
